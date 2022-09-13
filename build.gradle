@@ -18,7 +18,7 @@ dependencies {
     implementation 'org.boofcv:boofcv-swing:0.40.1'
     implementation 'org.boofcv:visualize:0.26'
     implementation 'org.openimaj:openimaj-image:1.3.10'
-    implementation 'com.github.sarxos:webcam-capture:0.3.10'
+    implementation 'org.bytedeco:javacv-platform:1.5.5'
 }
 
 test {

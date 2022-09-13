@@ -18,6 +18,10 @@ import boofcv.struct.image.GrayU8;
 import boofcv.gui.feature.VisualizeShapes;
 import com.github.sarxos.webcam.Webcam;
 import georegression.struct.point.Point2D_F64;
+import org.bytedeco.javacv.Frame;
+import org.bytedeco.javacv.FrameGrabber;
+import org.bytedeco.javacv.Java2DFrameConverter;
+import org.bytedeco.javacv.OpenCVFrameGrabber;
 
 /**
  * Shows you how to detect a QR Code inside an image and process the extracted data. Much of the information that
@@ -27,18 +31,20 @@ import georegression.struct.point.Point2D_F64;
  * @author Peter Abeles
  */
 public class ExampleDetectQrCode {
-    public static void main( String[] args ) {
+    public static void main( String[] args ) throws FrameGrabber.Exception {
+        FrameGrabber grabber = new OpenCVFrameGrabber(0);
+        Java2DFrameConverter converter = new Java2DFrameConverter();
+        grabber.start();
 
-        Webcam webcam = Webcam.getDefault();
-        webcam.open();
+
         var config = new ConfigMicroQrCode();
         MicroQrCodeDetector<GrayU8> detector = FactoryFiducial.microqr(config, GrayU8.class);
 
-        BufferedImage input = webcam.getImage();
+        BufferedImage input = converter.convert(grabber.grab());
         ImagePanel imagePanel = ShowImages.showWindow(input, "Example Micro QR Codes", true);
 
         while (true) {
-            input = webcam.getImage();
+            input = converter.convert(grabber.grab());
             GrayU8 gray = ConvertBufferedImage.convertFrom(input, (GrayU8) null);
 
 
