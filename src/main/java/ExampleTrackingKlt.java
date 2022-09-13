@@ -28,7 +28,7 @@ public class ExampleTrackingKlt {
         ConfigGeneralDetector configDetector = new ConfigGeneralDetector(-1,8,1);
         PkltConfig configKlt = new PkltConfig(3,new int[]{1,2,4,8});
 
-//        PointTracker<GrayF32> tracker = FactoryPointTracker.klt(configKlt,configDetector,GrayF32.class,null);
+        PointTracker<GrayF32> tracker = FactoryPointTracker.klt(configKlt,configDetector,GrayF32.class,null);
 
         // Open a webcam at a resolution close to 640x480
         Webcam webcam = UtilWebcamCapture.openDefault(640,480);
@@ -44,23 +44,23 @@ public class ExampleTrackingKlt {
             BufferedImage image = webcam.getImage();
             GrayF32 gray = ConvertBufferedImage.convertFrom(image,(GrayF32)null);
 
-//            tracker.process(gray);
-//
-//            List<PointTrack> tracks = tracker.getActiveTracks(null);
-//
-//            // Spawn tracks if there are too few
-//            if( tracks.size() < minimumTracks ) {
-//                tracker.spawnTracks();
-//                tracks = tracker.getActiveTracks(null);
-//                minimumTracks = tracks.size()/2;
-//            }
+            tracker.process(gray);
+
+            List<PointTrack> tracks = tracker.getActiveTracks(null);
+
+            // Spawn tracks if there are too few
+            if( tracks.size() < minimumTracks ) {
+                tracker.spawnTracks();
+                tracks = tracker.getActiveTracks(null);
+                minimumTracks = tracks.size()/2;
+            }
 
             // Draw the tracks
             Graphics2D g2 = image.createGraphics();
 
-//            for( PointTrack t : tracks ) {
-//                VisualizeFeatures.drawPoint(g2,(int)t.x,(int)t.y,Color.RED);
-//            }
+            for( PointTrack t : tracks ) {
+                VisualizeFeatures.drawPoint(g2,(int)t.x,(int)t.y,Color.RED);
+            }
 
             gui.setImage(image);
         }
