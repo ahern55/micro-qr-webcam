@@ -1,35 +1,21 @@
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.util.List;
-
 import boofcv.abst.fiducial.MicroQrCodeDetector;
-import boofcv.abst.fiducial.QrCodeDetector;
 import boofcv.alg.fiducial.microqr.MicroQrCode;
 import boofcv.alg.fiducial.qrcode.QrCode;
 import boofcv.factory.fiducial.ConfigMicroQrCode;
-import boofcv.factory.fiducial.ConfigQrCode;
 import boofcv.factory.fiducial.FactoryFiducial;
+import boofcv.gui.feature.VisualizeShapes;
 import boofcv.gui.image.ImagePanel;
 import boofcv.gui.image.ShowImages;
-import boofcv.io.UtilIO;
 import boofcv.io.image.ConvertBufferedImage;
-import boofcv.io.image.UtilImageIO;
 import boofcv.struct.image.GrayU8;
-import boofcv.gui.feature.VisualizeShapes;
-import com.github.sarxos.webcam.Webcam;
-import georegression.struct.point.Point2D_F64;
-import org.bytedeco.javacv.Frame;
 import org.bytedeco.javacv.FrameGrabber;
 import org.bytedeco.javacv.Java2DFrameConverter;
 import org.bytedeco.javacv.OpenCVFrameGrabber;
 
-/**
- * Shows you how to detect a QR Code inside an image and process the extracted data. Much of the information that
- * is computed while detecting and decoding a QR Code is saved inside the {@link QrCode} class. This can be useful
- * for application developers.
- *
- * @author Peter Abeles
- */
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.util.List;
+
 public class WebcamDetectQRCode {
     public static void main(String[] args) throws FrameGrabber.Exception {
         FrameGrabber grabber = new OpenCVFrameGrabber(0);
@@ -56,13 +42,13 @@ public class WebcamDetectQRCode {
             g2.setColor(Color.GREEN);
             g2.setStroke(new BasicStroke(strokeWidth));
             for (MicroQrCode qr : detections) {
-                System.out.println(qr.bounds.toString());
-                // The message encoded in the marker
-                System.out.println("message: '" + qr.message + "'");
-
                 // Visualize its location in the image
                 VisualizeShapes.drawPolygon(qr.bounds, true, 1, g2);
                 VisualizeShapes.draw(qr.bounds.vertexes.get(0), qr.bounds.vertexes.get(2), g2);
+                Position p = Position.fromPolygon(qr.bounds);
+                g2.drawString("Heading: " + p.heading, 100, 100);
+
+                g2.drawString("message: '" + qr.message + "'", 100, 85);
             }
 
             // List of objects it thinks might be a QR Code but failed for various reasons
