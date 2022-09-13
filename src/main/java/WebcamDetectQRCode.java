@@ -30,12 +30,11 @@ import org.bytedeco.javacv.OpenCVFrameGrabber;
  *
  * @author Peter Abeles
  */
-public class ExampleDetectQrCode {
-    public static void main( String[] args ) throws FrameGrabber.Exception {
+public class WebcamDetectQRCode {
+    public static void main(String[] args) throws FrameGrabber.Exception {
         FrameGrabber grabber = new OpenCVFrameGrabber(0);
         Java2DFrameConverter converter = new Java2DFrameConverter();
         grabber.start();
-
 
         var config = new ConfigMicroQrCode();
         MicroQrCodeDetector<GrayU8> detector = FactoryFiducial.microqr(config, GrayU8.class);
@@ -46,10 +45,6 @@ public class ExampleDetectQrCode {
         while (true) {
             input = converter.convert(grabber.grab());
             GrayU8 gray = ConvertBufferedImage.convertFrom(input, (GrayU8) null);
-
-
-//		config.considerTransposed = false; // by default, it will consider incorrectly encoded markers. Faster if false
-
 
             detector.process(gray);
 
@@ -80,7 +75,6 @@ public class ExampleDetectQrCode {
 
                 VisualizeShapes.drawPolygon(qr.bounds, true, 1, g2);
             }
-
 
             imagePanel.setImageUI(input);
         }
