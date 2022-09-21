@@ -1,0 +1,7 @@
+name: 1
+calibration:
+  - region: A
+    x1: 75
+    y1: 75
+    x2: 1200
+    y2: 650
